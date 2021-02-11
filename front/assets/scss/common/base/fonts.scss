@@ -1,0 +1,29 @@
+@font-face {
+  font-family: 'Circe';
+  src: url('~assets/fonts/Circe-Regular.woff2') format("woff2"), url('~assets/fonts/Circe-Regular.woff') format("woff");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Circe';
+  src: url('~assets/fonts/Circe-Bold.woff2') format("woff2"), url('~assets/fonts/Circe-Bold.woff') format("woff");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: 'IBMPlexSans';
+  src: url('~assets/fonts/IBMPlexSans-Regular.woff2') format("woff2"), url('~assets/fonts/IBMPlexSans-Regular.woff') format("woff");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'IBMPlexSans';
+  src: url('~assets/fonts/IBMPlexSans-Medium.woff2') format("woff2"), url('~assets/fonts/IBMPlexSans-Medium.woff') format("woff");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'IBMPlexSans';
+  src: url('~assets/fonts/IBMPlexSans-Bold.woff2') format("woff2"), url('~assets/fonts/IBMPlexSans-Bold.woff') format("woff");
+  font-weight: 700;
+}

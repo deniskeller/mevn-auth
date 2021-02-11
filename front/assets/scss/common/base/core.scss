@@ -1,0 +1,69 @@
+html {
+  background: #E5E5E5;
+  color: $black;
+  font-family: $font-IBMPlexSans;
+  font-size: (16/720) * 100vh;
+  min-height: 100%;
+  line-height: 1.8;
+}
+* {
+  box-sizing: border-box;
+}
+
+@media screen and (max-aspect-ratio: 1440/720) {
+  html {
+    font-size: (16/1440) * 100vw;
+  }
+}
+
+@media only screen and (min-width: 1440px) and (max-aspect-ratio: 1440/720) {
+  html {
+    font-size: 16px;
+  }
+}
+
+@media only screen and (min-height: 720px) and (min-aspect-ratio: 1440/720) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  @include ifmobile {
+    font-size: (16/375) * 100vw;
+  }
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: $blue;
+  text-decoration: none;
+  &:active {
+    color: $blue;
+  }
+}
+
+.layout {
+  position: relative;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px $white inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
