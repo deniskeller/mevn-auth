@@ -20,8 +20,11 @@ const store = {
   },
 
   mutations: {
-    increment (state, payload) {
-      state.user = payload
+    setUser (state, payload) {
+      state.user = payload;
+    },
+    setAuth (state, payload) {
+      state.auth = payload;
     },
   },
 

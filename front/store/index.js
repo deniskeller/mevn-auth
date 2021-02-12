@@ -6,6 +6,7 @@ export const modules = {
 
 export const state = () => {
   return {
+    auth: false,
   };
 }
 

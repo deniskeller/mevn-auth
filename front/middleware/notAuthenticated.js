@@ -2,7 +2,7 @@ export default function ({
   store,
   redirect
 }) {
-  if (!store.state.auth) {
-    return redirect('/registration');
+  if (store.$auth.$state.auth) {
+    return redirect('/');
   }
 }

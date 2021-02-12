@@ -147,17 +147,16 @@ export default {
           phone: this.form.phone,
           language: this.form.language
         };
-        // console.log('formData: ', formData);
 
         let response = await register(formData);
 
         console.log('response: ', response);
-        // this.$router.push('/');
+        this.$store.commit('setAuth', true);
+        this.$router.push('/');
 
       } catch (err) {
         console.log('error: ' + err)
-      } 
-      // this.increment(formData);
+      }
     },
 
     isAgree(is_agree) {

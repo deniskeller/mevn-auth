@@ -14,7 +14,8 @@ import Navbar from '@/components/Navbar'
 import LayoutPreload from '~/components/LayoutPreload'
 
 export default {
-  middleware: 'auth',
+  middleware: 'authenticated',
+  
   components: {
     LayoutPreload,
     Navbar

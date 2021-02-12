@@ -12,7 +12,8 @@ mongoose.connect(
   {
     useCreateIndex: true,
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
   }
 )
 
@@ -25,7 +26,7 @@ routes.forEach(item => {
   app.use(`/api/amigoweb/${item}`, require(`./src/routes/${item}`));
 })
 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 http.createServer({}, app).listen(PORT);
 console.log(`сервер запущен на хосте: ${PORT}`);
 

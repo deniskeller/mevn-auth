@@ -10,37 +10,45 @@
     </BaseHeadline>
     <form class="login-form" id="form">
       <BaseInput
-        label="Имя"
-        type="name"
+        label="Имя"   
+        type="text"
         name="name"
         placeholder="Введите Ваше имя"
-        class="login-form__input"
-        v-model.trim="form.name"
-      />
+        class="login-form__input"  
+        v-model="form.name"
+        :is_error="isNameValid"
+        :error="error"
+        @blur="$v.form.name.$touch()"
+      /> 
 
       <BaseInput
-        label="Еmail"
-        type="email"
+        label="Еmail"   
+        type="text"
         name="email"
+        v-model.trim="form.email"
         placeholder="Введите ваш email"
         class="login-form__input"
-        v-model.trim="form.email"
+        :is_error="!$v.form.email.email && $v.form.email.$error"
+        :error="error"
+        @blur="$v.form.email.$touch()"
       />
 
       <BaseButton
-        :is-inactive="is_login"
+        :is-inactive="$v.$invalid"
         type="default"
         class="login-form__button"
         @click.native="submitHandler"
       >
         Войти
       </BaseButton>
+
     </form>
   </BaseContent>
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions, mapMutations } from 'vuex';
+import { email, required } from "vuelidate/lib/validators";
+import { mapGetters, mapActions, mapMutations } from 'vuex';
 
 import { login } from '@/services/ApiServicesAuth';
 
@@ -53,21 +61,32 @@ export default {
       form: {
         name: '',
         email: ''
-      }
+      },
+      error: 'Введено не корректное значение'
     }
   },
-  computed: {
-    ...mapGetters({
-      count: 'auth/count2'
-      // ['', 'count2']
-    }),
-    // ...mapState('auth', ['count']),
-    // count() {
-    //   return this.$store.state.auth.count;
-    // },
+
+  validations: {
+    form: {
+      name: {
+        isNameValid(value) {
+          return /^[A-ZА-Яa-zа-я -]+$/.test(value);
+        },
+        required,
+      },
+      email: { email, required }
+    }    
+  },
+
+  computed: {    
+
+    isNameValid() {
+      return (!this.$v.form.name.isNameValid && this.$v.form.name.$model !== '' && this.$v.form.name.$dirty) ? true : false;
+    },
+
   },
   methods: {
-    ...mapMutations(['auth/increment']),
+    ...mapMutations('auth', ['setAuth']),
 
     async submitHandler() {
 
@@ -80,6 +99,7 @@ export default {
 
         let response = await login(formData);
         console.log('response: ', response);
+        this.$store.commit('setAuth', true);
         this.$router.push('/');
 
       } catch (err) {
