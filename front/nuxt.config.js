@@ -27,7 +27,7 @@ export default {
     { 
       src: '@/assets/scss/common.scss',
       lang: 'sass'
-    },
+    }
   ],
   /*
    ** Plugins to load before mounting the App

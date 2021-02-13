@@ -151,8 +151,9 @@ export default {
         let response = await register(formData);
 
         console.log('response: ', response);
+
         this.$store.commit('setAuth', true);
-        this.$router.push('/');
+        // this.$router.push('/');
 
       } catch (err) {
         console.log('error: ' + err)
