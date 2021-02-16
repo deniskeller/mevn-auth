@@ -5,6 +5,7 @@
     <main>
       <div class="container">
         <nuxt />
+        <notifications group="all" />
       </div>
     </main>
   </div>

@@ -4,7 +4,7 @@
       title="Регистрация" 
       class="login-headline">
       <p class="login-headline__subtitle">
-        Уже есть аккаунт? <nuxt-link class="login-headline__subtitle__link" to="/login">Войти</nuxt-link>
+        Уже есть аккаунт? <NuxtLink  class="login-headline__subtitle__link" to="/login">Войти</NuxtLink>
       </p>
     </BaseHeadline>
     <form class="login-form" id="form">     
@@ -63,7 +63,7 @@
           v-model="form.is_agree"
           name="agree"
           @click="isAgree(form.is_agree)"/>
-        <p class="login-form__chekbox__title">Принимаю <nuxt-link  to="/terms">условия</nuxt-link> использования</p> 
+        <p class="login-form__chekbox__title">Принимаю <NuxtLink   to="/terms">условия</NuxtLink> использования</p> 
       </div>
 
       <BaseButton
@@ -79,13 +79,13 @@
 </template>
 
 <script>
+
+
 import { validationMixin } from 'vuelidate';
 import { email, required } from "vuelidate/lib/validators";
 import { checkRegexPhone, checkLengthPhone } from '@/validators/phone';
 
-import { mapGetters, mapActions, mapMutations } from 'vuex';
-
-import { register } from '@/services/ApiServicesAuth';
+import { mapActions, mapMutations } from 'vuex';
 
 export default {
   layout: 'empty',
@@ -137,6 +137,7 @@ export default {
 
   methods: {
     ...mapMutations(['increment']),
+    ...mapActions(['register']),
     
     async submitHandler(){
 
@@ -147,16 +148,13 @@ export default {
           phone: this.form.phone,
           language: this.form.language
         };
-
-        let response = await register(formData);
-
-        console.log('response: ', response);
-
+        
+        await this.register(formData);
         this.$store.commit('setAuth', true);
-        // this.$router.push('/');
+        this.$router.push('/');
 
       } catch (err) {
-        console.log('error: ' + err)
+        console.log('error reg: ' + err)
       }
     },
 

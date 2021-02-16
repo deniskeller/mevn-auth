@@ -10,19 +10,19 @@
     </BaseHeadline>
     <form class="login-form" id="form">
       <BaseInput
-        label="Имя"   
+        label="Имя"
         type="text"
         name="name"
         placeholder="Введите Ваше имя"
-        class="login-form__input"  
+        class="login-form__input"
         v-model="form.name"
         :is_error="isNameValid"
         :error="error"
         @blur="$v.form.name.$touch()"
-      /> 
+      />
 
       <BaseInput
-        label="Еmail"   
+        label="Еmail"
         type="text"
         name="email"
         v-model.trim="form.email"
@@ -41,16 +41,13 @@
       >
         Войти
       </BaseButton>
-
     </form>
   </BaseContent>
 </template>
 
 <script>
-import { email, required } from "vuelidate/lib/validators";
-import { mapGetters, mapActions, mapMutations } from 'vuex';
-
-import { login } from '@/services/ApiServicesAuth';
+import { email, required } from 'vuelidate/lib/validators'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 
 export default {
   layout: 'empty',
@@ -70,47 +67,44 @@ export default {
     form: {
       name: {
         isNameValid(value) {
-          return /^[A-ZА-Яa-zа-я -]+$/.test(value);
+          return /^[A-ZА-Яa-zа-я -]+$/.test(value)
         },
-        required,
+        required
       },
       email: { email, required }
-    }    
+    }
   },
 
-  computed: {    
-
+  computed: {
     isNameValid() {
-      return (!this.$v.form.name.isNameValid && this.$v.form.name.$model !== '' && this.$v.form.name.$dirty) ? true : false;
-    },
-
+      return !this.$v.form.name.isNameValid &&
+        this.$v.form.name.$model !== '' &&
+        this.$v.form.name.$dirty
+        ? true
+        : false
+    }
   },
+
   methods: {
-    ...mapMutations('auth', ['setAuth']),
+    ...mapMutations(['setAuth']),
+    ...mapActions(['login']),
 
     async submitHandler() {
-
       try {
         const formData = {
           name: this.form.name,
           email: this.form.email
-        };
-        console.log('formData: ', formData);
+        }      
 
-        let response = await login(formData);
-        console.log('response: ', response);
-        this.$store.commit('setAuth', true);
-        this.$router.push('/');
+        await this.login(formData);
 
+        this.setAuth(true)
+        this.$router.push('/')
+        this.$notify('Hello user!')
+        
       } catch (err) {
-        console.log('error: ' + err)
-      }     
-
-      
-    },
-    increment() {
-      this.$store.commit('auth/increment', 5)
-      // console.log('count', this.$store.state.auth.count)
+        console.log('error log: ' + err)
+      }
     }
   }
 }

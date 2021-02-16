@@ -1,31 +1,108 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const { User, Token } = require('../models');
+let messageText = "";
 
-module.exports = {
+module.exports = {  
   
   async register({ body: { name, email, phone, language }, res }) {
     try {
-      const foundUser = await User.findOne({ email });
   
-      if(foundUser) {
+      const foundUserName = await User.findOne({ name }) ;
+  
+      if(foundUserName) {
+        messageText = "Пользователь с таким именем уже существует";
         return res.status(403).send({
-          message: "Пользователь с такими данными уже существует",
+          message: messageText,
+          error
+        });
+      }      
+      const foundUserEmail = await User.findOne({ email });
+  
+      if(foundUserEmail) {
+        messageText = "Пользователь с такой почтой уже существует";
+        return res.status(403).send({
+          message: messageText,
           error
         });
       }
   
-      const newUser = await new User({ name, email, phone, language });      
+      const newUser = await new User({ name, email, phone, language });
       await newUser.save();
   
       return res.status(200).send({
         message: "Пользователь создан",
+        email: newUser.email,
+        name: newUser.name,
+        phone: newUser.phone,
+        language: newUser.language
       })
+      
+  
+    } catch (error) {
+      return res.status(403).send({
+        message: messageText,
+        error,
+      });    
+    }
+  },
+
+  async login({ body: { name, email}, res }) {
+    try {
+      const foundUser = await User.findOne({ email });
+  
+      if(!foundUser) {
+        return res.status(403).send({
+          message: "Извините, введенные данные не верны",
+          error
+        });
+      }
+  
+      const isNameCorrect = foundUser.name == name
+  
+      if(!isNameCorrect) {
+        return res.status(403).send({
+          message: "Извините, введенные данные не верны",
+          error
+        });
+      }
+      
+      const accessToken = jwt.sign({
+        userId: foundUser._id,
+        email: foundUser.email
+      }, process.env.JWT_SECRET, {
+        expiresIn: '1m'
+      });
+  
+      const refreshToken = jwt.sign({
+        userId: foundUser._id,
+        email: foundUser.email
+      }, process.env.JWT_SECRET_REFRESH);
+  
+      const foundToken = await Token.findOne({
+        user: foundUser._id
+      });
+  
+      if(foundToken) {
+        await Token.findByIdAndUpdate(foundToken._id, { token: refreshToken });
+  
+        return res.status(200).send({
+          // accessToken,
+          // refreshToken,
+          email: foundUser.email,
+          name: foundUser.name,
+          phone: foundUser.phone,
+          message: "Пользователь авторизован",
+        })
+      }
+  
+      const token = new Token({ token: refreshToken, user: foundUser._id });
+      await token.save();      
   
     } catch (error) {
       return res.status(403).send({
         message: "Извините, введенные данные не верны",
-        error
+        error,
       });    
     }
   },
@@ -39,7 +116,7 @@ module.exports = {
 
     if(!foundToken) {
       return status(403).send({
-        message: 'пользователб не авторизован'
+        message: 'пользователь не авторизован'
       })
     }
 
@@ -93,64 +170,6 @@ module.exports = {
     })
 
 
-  },
-
-  async login({ body: { name, email}, res }) {
-    try {
-      const foundUser = await User.findOne({ email });
-
-      if(!foundUser) {
-        return res.status(403).send({
-          message: "Извините, введенные данные не верны",
-          error
-        });
-      }
-
-      const isNameCorrect = foundUser.name == name
-
-      if(!isNameCorrect) {
-        return res.status(403).send({
-          message: "Извините, введенные данные не верны",
-          error
-        });
-      }
-      const accessToken = jwt.sign({
-        userId: foundUser._id,
-        email: foundUser.email
-      }, process.env.JWT_SECRET, {
-        expiresIn: '1m'
-      });
-
-      const refreshToken = jwt.sign({
-        userId: foundUser._id,
-        email: foundUser.email
-      }, process.env.JWT_SECRET_REFRESH);
-
-      const foundToken = await Token.findOne({
-        user: foundUser._id
-      });
-
-      if(foundToken) {
-        await Token.findByIdAndUpdate(foundToken._id, { token: refreshToken });
-
-        return res.status(200).send({
-          accessToken,
-          refreshToken,
-          email: foundUser.email
-        })
-      }
-
-      const token = new Token({ token: refreshToken, user: foundUser._id });
-      await token.save();
-
-      
-
-    } catch (error) {
-      return res.status(403).send({
-        message: "Извините, введенные данные не верны",
-        error
-      });    
-    }
   },
 
 }

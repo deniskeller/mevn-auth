@@ -34,7 +34,8 @@ export default {
    */
   plugins: [
     {src: '~/plugins/global'},
-    {src: '~/plugins/Vuelidate'}
+    {src: '~/plugins/Vuelidate'},
+    {src: '~/plugins/notifications.js'}    
   ],
   /*
    ** Nuxt.js dev-modules

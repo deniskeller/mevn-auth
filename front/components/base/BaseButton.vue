@@ -18,14 +18,14 @@ export default {
 </script>
 
 <template>
-  <nuxt-link
+  <NuxtLink
     :to="to"
     :class="['base-button_' + type, { is_inactive: isInactive }]"
     tag="button"
     class="base-button"
   >
     <slot />
-  </nuxt-link>
+  </NuxtLink >
 </template>
 
 <style lang="scss">

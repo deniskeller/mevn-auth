@@ -1,5 +1,5 @@
 import { request } from './Api';
 
-export const register = (data) => request({ url: 'auth/signup', method: 'post', data });
+export const registerUser = (data) => request({ url: 'auth/signup', method: 'POST', headers: 'application/json;charset=utf-8', data });
 
-export const login = (data) => request({ url: 'auth/login', method: 'post', data});
+export const loginUser = (data) => request({ url: 'auth/login', method: 'POST', headers: 'application/json;charset=utf-8', data });
