@@ -5,8 +5,7 @@ export const modules = {
 };
 
 export const state = () => {
-  return {
-  };
+  return {};
 }
 
 export const mutations = {}

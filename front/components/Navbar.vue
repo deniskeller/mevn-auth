@@ -20,7 +20,7 @@
 </template>
 
 <script>
-
+import { mapActions } from 'vuex';
 export default {
   data() {
     return {
@@ -30,8 +30,9 @@ export default {
   computed: {
   },
   methods: {
+    ...mapActions(['logout']),
     exit() {
-      this.$router.push('/login');
+      this.logout()      
     }  
   }
 }

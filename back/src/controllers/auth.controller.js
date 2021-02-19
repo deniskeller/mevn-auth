@@ -1,33 +1,20 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const { User, Token } = require('../models');
-let messageText = "";
 
 module.exports = {  
   
-  async register({ body: { name, email, phone, language }, res }) {
+  async register(req, res) {
     try {
-  
-      const foundUserName = await User.findOne({ name }) ;
-  
-      if(foundUserName) {
-        messageText = "Пользователь с таким именем уже существует";
-        return res.status(403).send({
-          message: messageText,
-          error
-        });
-      }      
-      const foundUserEmail = await User.findOne({ email });
-  
-      if(foundUserEmail) {
-        messageText = "Пользователь с такой почтой уже существует";
-        return res.status(403).send({
-          message: messageText,
-          error
-        });
-      }
+      const { name, email, phone, language } = req.body;
+      
+      const foundUser = await User.findOne({ $or: [{ name }, { email }] });
+      if(foundUser) {
+        return res.status(403).send({ message: "Пользователь с таким именем или почтой уже существует" });
+      } 
   
       const newUser = await new User({ name, email, phone, language });
+      // console.log('newUser: ', newUser);
       await newUser.save();
   
       return res.status(200).send({
@@ -36,42 +23,32 @@ module.exports = {
         name: newUser.name,
         phone: newUser.phone,
         language: newUser.language
-      })
-      
+      })  
   
     } catch (error) {
-      return res.status(403).send({
-        message: messageText,
-        error,
-      });    
+      return res.status(403).send({ message: "Что-то пошло не так" });    
     }
   },
 
-  async login({ body: { name, email}, res }) {
+  async login(req, res) {
     try {
-      const foundUser = await User.findOne({ email });
-  
+      const { name, email} = req.body;
+
+      const foundUser = await User.findOne({ email });  
       if(!foundUser) {
-        return res.status(403).send({
-          message: "Извините, введенные данные не верны",
-          error
-        });
+        return res.status(403).send({ message: "Извините, введенные данные не верны" });
       }
   
-      const isNameCorrect = foundUser.name == name
-  
+      const isNameCorrect = foundUser.name == name;  
       if(!isNameCorrect) {
-        return res.status(403).send({
-          message: "Извините, введенные данные не верны",
-          error
-        });
+        return res.status(403).send({ message: "Извините, введенные данные не верны" });
       }
       
       const accessToken = jwt.sign({
         userId: foundUser._id,
         email: foundUser.email
       }, process.env.JWT_SECRET, {
-        expiresIn: '1m'
+        expiresIn: '1h'
       });
   
       const refreshToken = jwt.sign({
@@ -87,12 +64,13 @@ module.exports = {
         await Token.findByIdAndUpdate(foundToken._id, { token: refreshToken });
   
         return res.status(200).send({
-          // accessToken,
-          // refreshToken,
+          accessToken,
+          refreshToken,
           email: foundUser.email,
           name: foundUser.name,
           phone: foundUser.phone,
           message: "Пользователь авторизован",
+          id: foundUser._id
         })
       }
   
@@ -123,7 +101,7 @@ module.exports = {
     await Token.findByIdAndDelete(foundToken._id);
 
     return res.status(200).send({
-      message: 'Юзер разлогинен'
+      message: 'пользователь разлогинен'
     })
 
   },
@@ -164,12 +142,40 @@ module.exports = {
         accessToken,
         email: user.email
       })
-
-
-
     })
 
-
   },
+
+  async getUser(req, res) {
+    try {
+      const { userId } = req.body;
+
+      // ищем токен в бд
+      const currentToken = await Token.findOne({ user: userId })
+
+      if(!currentToken) {
+        return res.status(403).send({ message: 'Пользователь не найден' })
+      }
+
+      const foundUser = await User.findOne({ _id: currentToken.user })
+      if(!foundUser) {
+        return res.status(403).send({ message: 'Пользователь не найден' })
+      }
+
+      return res.status(200).send({
+        email: foundUser.email,
+        name: foundUser.name,
+        phone: foundUser.phone,
+        message: "Пользователь авторизован",
+        id: foundUser._id
+      })
+      
+    } catch (error) {
+      return res.status(403).send({
+        message: "что-то пошло не так",
+        error,
+      });
+    }
+  }
 
 }

@@ -10,10 +10,18 @@
   justify-content: center;
 }
 </style>
+
 <script>
 export default {
+  middleware: 'notAuthenticated',
+  components: {},
+  created() {},
+  mounted() {},
+  computed: {},
+  methods: {},
 }
 </script>
+
 <style lang="scss" scoped>
 .vue-notification-group {
   position: absolute;

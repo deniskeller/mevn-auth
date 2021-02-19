@@ -7,4 +7,6 @@ router.route('/signup').post(auth.register);
 router.route('/refresh').post(auth.refreshToken);
 router.route('/logout').post(auth.logout);
 
+router.route('/token').post(auth.getUser);
+
 module.exports = router;

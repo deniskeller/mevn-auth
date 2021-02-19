@@ -11,12 +11,15 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "cookieparser": "^0.1.0",
+    "js-cookie": "^2.2.0",
     "@nuxtjs/auth": "^4.9.1",
     "@nuxtjs/auth-next": "5.0.0-1612791489.a5d8c28",
     "@nuxtjs/axios": "^5.13.1",
     "@nuxtjs/style-resources": "^1.0.0",
     "axios": "^0.21.1",
     "baron": "^3.0.3",
+    "localStorage": "^1.0.4",
     "node-sass": "^5.0.0",
     "nuxt": "^2.0.0",
     "nuxt-sass-resources-loader": "^2.0.5",

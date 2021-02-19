@@ -49,6 +49,8 @@
 import { email, required } from 'vuelidate/lib/validators'
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 
+const Cookie = process.client ? require('js-cookie') : undefined
+
 export default {
   layout: 'empty',
   data() {
@@ -90,6 +92,7 @@ export default {
     ...mapActions(['login']),
 
     async submitHandler() {
+      
       try {
         const formData = {
           name: this.form.name,
@@ -99,8 +102,17 @@ export default {
         await this.login(formData);
 
         this.setAuth(true)
+        Cookie.set('auth', true)
         this.$router.push('/')
-        this.$notify('Hello user!')
+        this.$notify(`Hello ${this.form.name}!`)
+
+
+        // const auth = {
+        //   accessToken: 'someStringGotFromApiServiceWithAjax'
+        // }
+        // this.$store.commit('setAuth', auth) // mutating to store for client rendering
+        // Cookie.set('auth', auth) // saving token in cookie for server rendering
+        // this.$router.push('/')
         
       } catch (err) {
         console.log('error log: ' + err)

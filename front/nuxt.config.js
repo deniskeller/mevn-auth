@@ -22,7 +22,7 @@ export default {
   loading: { color: '#fff' },
   /*
    ** Global CSS
-   */
+   */ 
   css: [
     { 
       src: '@/assets/scss/common.scss',
@@ -65,39 +65,39 @@ export default {
    ** Build configuration
    */
 
-  auth: {
-    strategies: {
-      local: {
-        scheme: 'refresh',
-        token: {
-          property: 'accessToken',
-          maxAge: 1800,
-          // type: 'Bearer'
-        },
-        refreshToken: {
-          property: 'refreshToken',
-          data: 'refreshToken',
-          maxAge: 60 * 60 * 24 * 30,
-        },
-        endpoints: {
-          user: false,
-          refresh: {
-            url: '/auth/refresh',
-            method: 'post',
-          },
-          login: {
-            url: '/auth/login',
-            method: 'post',
-            propertyName: 'accessToken',
-          },
-          logout: {
-            url: '/auth/logout',
-            method: 'post',
-          },
-        },
-      },
-    },
-  },
+  // auth: {
+  //   strategies: {
+  //     local: {
+  //       scheme: 'refresh',
+  //       token: {
+  //         property: 'accessToken',
+  //         maxAge: 1800,
+  //         // type: 'Bearer'
+  //       },
+  //       refreshToken: {
+  //         property: 'refreshToken',
+  //         data: 'refreshToken',
+  //         maxAge: 60 * 60 * 24 * 30,
+  //       },
+  //       endpoints: {
+  //         user: false,
+  //         refresh: {
+  //           url: '/auth/refresh',
+  //           method: 'post',
+  //         },
+  //         login: {
+  //           url: '/auth/login',
+  //           method: 'post',
+  //           propertyName: 'accessToken',
+  //         },
+  //         logout: {
+  //           url: '/auth/logout',
+  //           method: 'post',
+  //         },
+  //       },
+  //     },
+  //   },
+  // },
 
   
   build: {

@@ -23,6 +23,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 routes.forEach(item => {
+  // console.log('item: ', item);
   app.use(`/api/amigoweb/${item}`, require(`./src/routes/${item}`));
 })
 

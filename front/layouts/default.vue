@@ -11,15 +11,19 @@
   </div>
 </template>
 <script>
-import Navbar from '@/components/Navbar'
-import LayoutPreload from '~/components/LayoutPreload'
+import Navbar from '@/components/Navbar';
+import LayoutPreload from '~/components/LayoutPreload';
 
 export default {
   middleware: 'authenticated',
-  
   components: {
     LayoutPreload,
     Navbar
-  }
+  },
+  created() {},
+  mounted() {},
+  computed: {},
+  watch: {},
+  methods: {},
 }
 </script>
